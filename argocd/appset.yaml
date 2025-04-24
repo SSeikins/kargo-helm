@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: kargo-helm
-  namespace: argocd
+  namespace: argo-cd
 spec:
   generators:
   - git:
@@ -16,9 +16,6 @@ spec:
       annotations:
         kargo.akuity.io/authorized-stage: kargo-helm:{{path.basename}}
     spec:
-      destination:
-        namespace: kargo-helm-{{path.basename}}
-        name: demo
       project: kargo-helm
       source:
         path: charts/guestbook
@@ -27,3 +24,6 @@ spec:
           valueFiles:
           - "/env/{{path.basename}}/values.yaml"
           - "/env/{{path.basename}}/feature-flags.yaml"
+      destination:
+        namespace: kargo-helm-{{path.basename}}
+        name: in-cluster
